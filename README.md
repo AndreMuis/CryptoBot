@@ -2,7 +2,7 @@
 
 # CryptoBot
 
-Crypto bot for Mac
+Crypto bot for macOS
 
 Currently only works with the Binance US API.
 
