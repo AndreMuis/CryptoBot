@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Endpoints</key>
+	<dict>
+		<key>FearAndGreedIndexURL</key>
+		<string>https://api.alternative.me/fng</string>
+		<key>BinanceUSExchangeInfoURL</key>
+		<string>https://api.binance.us/api/v3/exchangeInfo</string>
+		<key>BinanceUSPricesURL</key>
+		<string>https://api.binance.us/api/v3/ticker/price</string>
+		<key>BinanceUSPriceChangeStatisticsURL</key>
+		<string>https://api.binance.us/api/v3/ticker/24hr</string>
+		<key>BinanceUSKlinesURL</key>
+		<string>https://api.binance.us/api/v3/klines</string>
+		<key>BinanceUSAccountURL</key>
+		<string>https://api.binance.us/api/v3/account</string>
+		<key>BinanceUSOrderURL</key>
+		<string>https://api.binance.us/api/v3/order</string>
+		<key>BinanceUSTradesURL</key>
+		<string>https://api.binance.us/api/v3/myTrades</string>
+		<key>BinanceUSOCOOrderURL</key>
+		<string>https://api.binance.us/api/v3/order/oco</string>
+	</dict>
+</dict>
+</plist>
