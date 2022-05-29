@@ -1,4 +1,4 @@
-![CryptoBot_32x32](https://user-images.githubusercontent.com/920149/170891728-35aabad4-5089-4707-92ca-73ed6fd4afb7.png)
+![CryptoBot_128x128](https://user-images.githubusercontent.com/920149/170891741-961fd4cf-22ec-4642-827a-4c575ae9750f.png)
 
 # CryptoBot
 
