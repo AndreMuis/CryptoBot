@@ -4,7 +4,7 @@ Crypto bot for Mac
 
 Currently only works with the Binance US API.
 
-You will have to install OpenSSL separately due to security reasons.
+You will have to install OpenSSL separately for security reasons.
 
 Add your SMTP server settings on the Settings tabs to receieve emails from the bot.
 
