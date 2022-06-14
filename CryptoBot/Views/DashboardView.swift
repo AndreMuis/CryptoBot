@@ -15,6 +15,7 @@ struct DashboardView: View {
         GridItem(.flexible(), alignment: .leading),
         GridItem(.flexible(), alignment: .leading),
         GridItem(.flexible(), alignment: .leading),
+        GridItem(.flexible(), alignment: .leading),
         GridItem(.flexible(), alignment: .leading)]
 
     var body: some View {
@@ -37,7 +38,8 @@ struct DashboardView: View {
                 LazyVGrid(columns: self.accountBalanceListColumns) {
                     Group {
                         Text("Asset")
-                        Text("Quantity")
+                        Text("Free")
+                        Text("Locked")
                         Text("Price")
                         Text("Quantity \(Constants.quoteAssetSymbol)")
                         Text("Last Trade Price")
@@ -46,11 +48,15 @@ struct DashboardView: View {
                     .font(.headline)
 
                     ForEach(self.viewModel.accountAssetList, id: \.self) { asset in
-                        Text("\(asset.name)")
-                        Text("\(asset.freeAsString)")
-                        Text("\(asset.priceAsString)")
-                        Text("\(asset.quantityAsString)")
-                        Text("\(asset.lastTradePriceAsString)")
+                        Group {
+                            Text("\(asset.name)")
+                            Text("\(asset.freeAsString)")
+                            Text("\(asset.lockedAsString)")
+                            Text("\(asset.priceAsString)")
+                            Text("\(asset.quoteQuantityAsString)")
+                            Text("\(asset.lastTradePriceAsString)")
+                        }
+                        .foregroundColor(asset.locked != 0 ? .blue : .black)
                     }
                 }
                 .padding(5)

@@ -9,7 +9,6 @@ import Foundation
 
 struct AppConfiguration {
     enum URLKey: String {
-        case fearAndGreedIndexURLKey = "FearAndGreedIndexURL"
         case binanceUSExchangeInfoURLKey = "BinanceUSExchangeInfoURL"
         case binanceUSPricesURLKey = "BinanceUSPricesURL"
         case binanceUSPriceChangeStatisticsURLKey = "BinanceUSPriceChangeStatisticsURL"

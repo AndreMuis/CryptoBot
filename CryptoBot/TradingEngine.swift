@@ -126,7 +126,7 @@ class TradingEngine: ObservableObject {
 
                             guard let quoteBalance = self.userAccount.quoteBalance,
                                   Constants.purchaseAmount < quoteBalance,
-                                  (asset.lastTrade == nil || asset.lastTrade?.isBuyer == false),
+                                  asset.locked == 0,
                                   rsi < Constants.rsiSellTheshold && mfi < Constants.mfiSellTheshold && zeroVolumeCount == 0 else {
                                       continue
                                   }
@@ -187,8 +187,6 @@ class TradingEngine: ObservableObject {
 
             for orderResponse in filledOrderResponseList {
                 do {
-                    print("\nbuy order response: \(orderResponse)")
-
                     guard let symbolFilter = self.userAccount.exchangeInfo.symbols.filter({ $0.marketPairSymbol == orderResponse.marketPairSymbol }).first else {
                         throw AppError.genericError(message: "could not find symbol filter for \(orderResponse.marketPairSymbol)")
                     }
@@ -202,8 +200,6 @@ class TradingEngine: ObservableObject {
                         throw AppError.genericError(message: "Unable to round down quantity and limit to \(symbolFilter.lotStepSize.significantFractionDigits) fraction digits.")
                     }
 
-                    print("initial price: \(price), initial quantity: \(quantity)")
-
                     let limitPrice = price * Constants.priceSellMaxMultiplier
 
                     guard let limitPrice = limitPrice.roundDown(fractionDigits: symbolFilter.priceTickSize.significantFractionDigits) else {
@@ -215,8 +211,6 @@ class TradingEngine: ObservableObject {
                     guard let stopPrice = stopPrice.roundDown(fractionDigits: symbolFilter.priceTickSize.significantFractionDigits) else {
                         throw AppError.genericError(message: "Unable to round down stop price and limit to \(symbolFilter.priceTickSize.significantFractionDigits) fraction digits.")
                     }
-
-                    print("final price: \(price), final stop price: \(stopPrice), final quantity: \(quantity)")
 
                     let publisher = try self.dataLayer.createSellOrder(marketPairSymbol: orderResponse.marketPairSymbol,
                                                                        quantity: quantity,

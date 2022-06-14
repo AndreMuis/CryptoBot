@@ -10,6 +10,7 @@ import Foundation
 struct AccountAsset: Hashable {
     let name: String
     var free: Decimal
+    var locked: Decimal
     var price: Decimal
     var lastTrade: Trade?
     var shouldUpdateLastTrade: Bool
@@ -22,16 +23,16 @@ struct AccountAsset: Hashable {
         return self.free.stringValue
     }
 
-    var quantity: Decimal? {
-        return self.free * price
+    var lockedAsString: String {
+        return self.locked.stringValue
     }
 
-    var quantityAsString: String {
-        if let quantity = self.quantity {
-            return quantity.currencyAsString
-        } else {
-            return ""
-        }
+    var quoteQuantity: Decimal? {
+        return (self.free + self.locked) * price
+    }
+
+    var quoteQuantityAsString: String {
+        return self.quoteQuantity?.currencyAsString ?? ""
     }
 
     var priceAsString: String {
@@ -46,9 +47,10 @@ struct AccountAsset: Hashable {
         }
     }
 
-    init(name: String, free: Decimal, price: Decimal) {
+    init(name: String, free: Decimal, locked: Decimal, price: Decimal) {
         self.name = name
         self.free = free
+        self.locked = locked
         self.price = price
         self.lastTrade = nil
         self.shouldUpdateLastTrade = true

@@ -9,30 +9,6 @@ import Combine
 import Foundation
 
 class DataLayer: ObservableObject {
-    func getFearAndGreedIndex() throws -> AnyPublisher<FearAndGreedIndex, Error> {
-        do {
-            let endpoint = try FearAndGreedIndexEndpoint()
-
-            let publisher = URLSession.dataTaskPublisher(for: endpoint)
-                .tryMap { data -> Data in
-                    let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String : Any]
-
-                    guard let dataArrayJSON = json?["data"] as? [[String : Any]],
-                          let dataJSON = dataArrayJSON.first else {
-                              throw AppError.genericError(message: "unable to extract data element from JSON")
-                          }
-
-                    let dataData = try JSONSerialization.data(withJSONObject: dataJSON, options: [])
-
-                    return dataData
-                }
-                .decode(type: FearAndGreedIndex.self, decoder: JSONDecoder())
-                .eraseToAnyPublisher()
-
-            return publisher
-        }
-    }
-
     func getExchangeInfo() throws -> AnyPublisher<ExchangeInfo, Error> {
         do {
             let endpoint = try ExchangeInfoEndpoint()
@@ -161,9 +137,6 @@ class DataLayer: ObservableObject {
                                                 stopPrice: stopPrice,
                                                 stopLimitPrice: stopPrice,
                                                 stopLimitTimeInForce: .goodTillCancelled)
-
-            print("\(endpoint.url)\n")
-
             let publisher = self.getBinanceUSData(endpoint: endpoint)
                 .decode(type: OCOOrderResponse.self, decoder: JSONDecoder())
                 .eraseToAnyPublisher()

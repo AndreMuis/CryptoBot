@@ -30,7 +30,6 @@
 		2A1F3C302817A20900A58926 /* UserAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F3C2F2817A20900A58926 /* UserAccount.swift */; };
 		2A1F3C322817A99100A58926 /* AccountAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F3C312817A99100A58926 /* AccountAsset.swift */; };
 		2A1F3C3828198ADC00A58926 /* Kline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F3C3728198ADC00A58926 /* Kline.swift */; };
-		2A1F3C3D2819A88A00A58926 /* FearAndGreedIndexEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F3C3C2819A88A00A58926 /* FearAndGreedIndexEndpoint.swift */; };
 		2A1F3C3F2819C07100A58926 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F3C3E2819C07000A58926 /* Endpoint.swift */; };
 		2A1F3C432819CC7300A58926 /* URL+Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F3C422819CC7300A58926 /* URL+Query.swift */; };
 		2A1F3C452819D09700A58926 /* KlineListEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F3C442819D09700A58926 /* KlineListEndpoint.swift */; };
@@ -96,7 +95,6 @@
 		2A1F3C2F2817A20900A58926 /* UserAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccount.swift; sourceTree = "<group>"; };
 		2A1F3C312817A99100A58926 /* AccountAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountAsset.swift; sourceTree = "<group>"; };
 		2A1F3C3728198ADC00A58926 /* Kline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kline.swift; sourceTree = "<group>"; };
-		2A1F3C3C2819A88A00A58926 /* FearAndGreedIndexEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FearAndGreedIndexEndpoint.swift; sourceTree = "<group>"; };
 		2A1F3C3E2819C07000A58926 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		2A1F3C422819CC7300A58926 /* URL+Query.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Query.swift"; sourceTree = "<group>"; };
 		2A1F3C442819D09700A58926 /* KlineListEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlineListEndpoint.swift; sourceTree = "<group>"; };
@@ -193,7 +191,6 @@
 				2A1F3C3E2819C07000A58926 /* Endpoint.swift */,
 				2A1F3C46281B070000A58926 /* AccountEndpoint.swift */,
 				2A0B30B52842974F000795D3 /* ExchangeInfoEndpoint.swift */,
-				2A1F3C3C2819A88A00A58926 /* FearAndGreedIndexEndpoint.swift */,
 				2A1F3C442819D09700A58926 /* KlineListEndpoint.swift */,
 				2A1F3C4A281B259700A58926 /* OrderEndpoint.swift */,
 				2ADE73262839811E000F6F46 /* OCOOrderEndpoint.swift */,
@@ -415,7 +412,6 @@
 				2A1F3C2C2816FAD200A58926 /* OrderStatus.swift in Sources */,
 				2A18120E283A7A5F00ED6C26 /* ListOrderStatus.swift in Sources */,
 				2ADE731F2832BED3000F6F46 /* Logger.swift in Sources */,
-				2A1F3C3D2819A88A00A58926 /* FearAndGreedIndexEndpoint.swift in Sources */,
 				2ADE731B2832A320000F6F46 /* SettingsView.swift in Sources */,
 				2A0B30BA2842985C000795D3 /* ExchangeInfoSymbol.swift in Sources */,
 				2A1F3C452819D09700A58926 /* KlineListEndpoint.swift in Sources */,

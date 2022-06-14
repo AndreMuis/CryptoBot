@@ -44,7 +44,7 @@ class DashboardViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .compactMap({ $0 })
             .sink(receiveValue: { list in
-                let list = list.sorted(by: { $0.quantity ?? 0.0 > $1.quantity ?? 0.0 })
+                let list = list.sorted(by: { $0.quoteQuantity ?? 0.0 > $1.quoteQuantity ?? 0.0 })
                 self.accountAssetList = list
             })
             .store(in: &self.subscribers)

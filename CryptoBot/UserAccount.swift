@@ -26,7 +26,7 @@ class UserAccount {
         var balance: Decimal = 0.0
 
         for asset in self.accountAssetList {
-            balance += asset.quantity ?? 0.0
+            balance += asset.quoteQuantity ?? 0.0
         }
 
         return balance
@@ -123,6 +123,7 @@ class UserAccount {
 
                 let accountAsset = AccountAsset(name: balance.asset,
                                                 free: balance.free,
+                                                locked: balance.locked,
                                                 price: price.amount)
 
                 self.accountAssetList.append(accountAsset)
@@ -141,12 +142,14 @@ class UserAccount {
                     throw AppError.genericError(message: "could not find index in account asset list for \(asset.marketPairSymbol)")
                 }
 
-                if balance.free != self.accountAssetList[index].free {
-                    self.updateAccountAsset(marketPairSymbol: balance.marketPairSymbol,
+                if balance.free != self.accountAssetList[index].free ||
+                    balance.locked != self.accountAssetList[index].locked {
+                    self.updateAccountAsset(marketPairSymbol: asset.marketPairSymbol,
                                             shouldUpdateLastTrade: true)
                 }
 
                 self.accountAssetList[index].free = balance.free
+                self.accountAssetList[index].locked = balance.locked
                 self.accountAssetList[index].price = price.amount
             }
         }
@@ -154,6 +157,8 @@ class UserAccount {
 
     func updateAccountAsset(marketPairSymbol: String, shouldUpdateLastTrade: Bool) {
         if let index = self.accountAssetList.firstIndex(where: { $0.marketPairSymbol == marketPairSymbol }) {
+            print("\(marketPairSymbol) \(shouldUpdateLastTrade)")
+
             self.accountAssetList[index].shouldUpdateLastTrade = shouldUpdateLastTrade
         }
     }

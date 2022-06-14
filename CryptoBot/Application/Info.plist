@@ -4,8 +4,6 @@
 <dict>
 	<key>Endpoints</key>
 	<dict>
-		<key>FearAndGreedIndexURL</key>
-		<string>https://api.alternative.me/fng</string>
 		<key>BinanceUSExchangeInfoURL</key>
 		<string>https://api.binance.us/api/v3/exchangeInfo</string>
 		<key>BinanceUSPricesURL</key>
