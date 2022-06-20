@@ -14,7 +14,6 @@ extension Decimal {
 
     func roundDown(fractionDigits: Int) -> Decimal? {
         let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
         formatter.roundingMode = .down
         formatter.maximumFractionDigits = fractionDigits
 

@@ -157,8 +157,6 @@ class UserAccount {
 
     func updateAccountAsset(marketPairSymbol: String, shouldUpdateLastTrade: Bool) {
         if let index = self.accountAssetList.firstIndex(where: { $0.marketPairSymbol == marketPairSymbol }) {
-            print("\(marketPairSymbol) \(shouldUpdateLastTrade)")
-
             self.accountAssetList[index].shouldUpdateLastTrade = shouldUpdateLastTrade
         }
     }
@@ -204,8 +202,6 @@ class UserAccount {
                                             self.sendEmail(trade: lastTrade)
                                         }
                                     }
-
-                                    print("\(tradeListResponseCount) \(assetList.count)")
 
                                     if tradeListResponseCount == assetList.count {
                                         promise(.success(()))

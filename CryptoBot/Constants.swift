@@ -46,8 +46,8 @@ struct Constants {
 
     static let purchaseAmount: Decimal = 100
     
-    static let priceSellMaxMultiplier: Decimal = 1.02
-    static let priceSellMinMultiplier: Decimal = 0.98
+    static let priceSellMaxMultiplier: Decimal = 1.01
+    static let priceSellMinMultiplier: Decimal = 0.99
 
     static let klineListLimit = 100
 
