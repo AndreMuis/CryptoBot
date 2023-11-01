@@ -14,9 +14,7 @@ struct OrderEndpoint: Endpoint {
 
     private let shell = Shell()
 
-    init(marketPairSymbol: String,
-         type: OrderType,
-         quoteOrderQuantity: Decimal) throws {
+    init(marketPairSymbol: String, side: OrderSide, quoteQuantity: Decimal, quotePrecision: Int) throws {
         guard let binanceUSAPIKey = AppDefaults.shared.binanceUSAPIKey else {
             throw AppError.genericError(message: "could not retrieve Binance US API key from app defaults")
         }
@@ -30,9 +28,9 @@ struct OrderEndpoint: Endpoint {
 
         var queryItems = [
             URLQueryItem(name: Constants.marketPairSymbolQueryItemName, value: marketPairSymbol),
-            URLQueryItem(name: Constants.sideQueryItemName, value: OrderSide.buy.rawValue),
-            URLQueryItem(name: Constants.typeQueryItemName, value: type.rawValue),
-            URLQueryItem(name: Constants.quoteOrderQuantityQueryItemName, value: quoteOrderQuantity.stringValue),
+            URLQueryItem(name: Constants.sideQueryItemName, value: side.rawValue),
+            URLQueryItem(name: Constants.typeQueryItemName, value: OrderType.market.rawValue),
+            URLQueryItem(name: Constants.quoteOrderQuantityQueryItemName, value: quoteQuantity.getStringValue(maximumFractionDigits: quotePrecision)),
             URLQueryItem(name: Constants.timestampQueryItemName, value: String(timestamp))
         ]
 

@@ -9,11 +9,20 @@ import SwiftUI
 
 @main
 struct CryptoBotApp: App {
+    let tradingEngine: TradingEngine
+    let userAccount: UserAccount
+
+    init() {
+        let userAccount = UserAccount()
+
+        self.tradingEngine = TradingEngine(userAccount: userAccount)
+        self.userAccount = userAccount
+    }
+
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .frame(width: Constants.windowSize.width,
-                       height: Constants.windowSize.height)
+            RootView(tradingEngine: self.tradingEngine,
+                     userAccount: self.userAccount)
                 .navigationTitle("Crypto Bot")
         }
     }

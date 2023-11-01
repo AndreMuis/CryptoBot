@@ -13,8 +13,7 @@ struct ExchangeInfoSymbol: Decodable {
     let quoteAssetSymbol: String
     let quotePrecision: Int
     let quoteAssetPrecision: Int
-    let priceTickSize: Decimal
-    let lotStepSize: Decimal
+    let minNotionalFilter: MinNotionalFilter
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -26,14 +25,11 @@ struct ExchangeInfoSymbol: Decodable {
         self.quoteAssetPrecision = try container.decode(Int.self, forKey: .quoteAssetPrecision)
 
         var filtersContainer = try container.nestedUnkeyedContainer(forKey: .filters)
-
-        let priceSymbolFilter = try filtersContainer.decode(PriceSymbolFilter.self)
-        self.priceTickSize = priceSymbolFilter.tickSize
-
+        _ = try filtersContainer.decode(DummyDecodable.self)
+        _ = try filtersContainer.decode(DummyDecodable.self)
         _ = try filtersContainer.decode(DummyDecodable.self)
 
-        let lotSizeSymbolFilter = try filtersContainer.decode(LotSizeSymbolFilter.self)
-        self.lotStepSize = lotSizeSymbolFilter.stepSize
+        self.minNotionalFilter = try filtersContainer.decode(MinNotionalFilter.self)
     }
 
     enum CodingKeys: String, CodingKey {

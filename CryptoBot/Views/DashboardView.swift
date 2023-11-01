@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct DashboardView: View {
-    @ObservedObject private var viewModel = DashboardViewModel()
+    @ObservedObject private var viewModel: DashboardViewModel
+    @ObservedObject private var tradingEngine: TradingEngine
+    @ObservedObject private var userAccount: UserAccount
 
     private var accountBalanceListColumns = [
         GridItem(.flexible(), alignment: .leading),
@@ -18,18 +20,28 @@ struct DashboardView: View {
         GridItem(.flexible(), alignment: .leading),
         GridItem(.flexible(), alignment: .leading)]
 
+    init(tradingEngine: TradingEngine, userAccount: UserAccount) {
+        self.viewModel = DashboardViewModel(tradingEngine: tradingEngine)
+        self.tradingEngine = tradingEngine
+        self.userAccount = userAccount
+    }
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack() {
-                Text("Balance: \(self.viewModel.balance)")
+                Text("Balance: \(self.userAccount.balance.currencyAsString)")
                     .padding(5)
                     .background(Color.white)
 
-                Text("Quote Balance: \(self.viewModel.quoteBalance)")
+                Text("Quote Balance: \(self.userAccount.quoteBalance.currencyAsString)")
                     .padding(5)
                     .background(Color.white)
 
-                Text("Portfolio Balance: \(self.viewModel.portfolioBalance)")
+                Text("Quote Symbol: \(Constants.quoteSymbol)")
+                    .padding(5)
+                    .background(Color.white)
+
+                Text("Portfolio Balance: \(self.userAccount.portfolioBalance.currencyAsString)")
                     .padding(5)
                     .background(Color.white)
             }
@@ -37,26 +49,26 @@ struct DashboardView: View {
             ScrollView {
                 LazyVGrid(columns: self.accountBalanceListColumns) {
                     Group {
-                        Text("Asset")
+                        Text("Symbol")
                         Text("Free")
                         Text("Locked")
                         Text("Price")
-                        Text("Quantity \(Constants.quoteAssetSymbol)")
-                        Text("Last Trade Price")
+                        Text("Balance")
+                        Text("Min Sell Balance")
                     }
                     .padding(.bottom, 1)
                     .font(.headline)
 
-                    ForEach(self.viewModel.accountAssetList, id: \.self) { asset in
+                    ForEach(self.userAccount.accountAssetListSorted, id: \.self) { asset in
                         Group {
-                            Text("\(asset.name)")
+                            Text("\(asset.symbol)")
                             Text("\(asset.freeAsString)")
                             Text("\(asset.lockedAsString)")
                             Text("\(asset.priceAsString)")
-                            Text("\(asset.quoteQuantityAsString)")
-                            Text("\(asset.lastTradePriceAsString)")
+                            Text("\(asset.balanceAsString)")
+                            Text("\(asset.sellBalanceAsString)")
                         }
-                        .foregroundColor(asset.locked != 0 ? .blue : .black)
+                        .foregroundColor(asset.canSell ? .blue : .black)
                     }
                 }
                 .padding(5)
@@ -66,17 +78,17 @@ struct DashboardView: View {
             Spacer()
 
             HStack {
-                Text("Status: \(self.viewModel.tradingEngineStatus)")
+                Text("Status: \(self.tradingEngine.status.rawValue)")
                     .padding(5)
                     .background(Color.white)
 
-                Text("Last run date: \(self.viewModel.lastRunDateAsString)")
+                Text("Last run date: \(self.tradingEngine.lastRunDateAsString)")
                     .padding(5)
                     .background(Color.white)
             }
 
             HStack {
-                Text("Error Message: \(self.viewModel.errorMessage)")
+                Text("Error Message: \(self.tradingEngine.error?.localizedDescription ?? "")")
                     .padding(5)
                     .background(Color.white)
 
@@ -96,6 +108,8 @@ struct DashboardView: View {
 
 struct DashboardView_Previews: PreviewProvider {
     static var previews: some View {
-        DashboardView()
+        let userAccount = UserAccount()
+
+        DashboardView(tradingEngine: TradingEngine(userAccount: userAccount), userAccount: userAccount)
     }
 }

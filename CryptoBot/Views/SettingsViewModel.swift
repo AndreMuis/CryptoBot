@@ -18,6 +18,9 @@ class SettingsViewModel: ObservableObject {
     @Published var smtpServerPassword: String = ""
 
     func viewDidAppear() {
+        self.binanceUSAPIKey = AppDefaults.shared.binanceUSAPIKey ?? ""
+        self.binanceUSAPISecretKey = AppDefaults.shared.binanceUSAPISecretKey ?? ""
+
         self.smtpServerHostname = AppDefaults.shared.smtpServerHostname ?? ""
         self.smtpServerEmail = AppDefaults.shared.smtpServerEmail ?? ""
         self.smtpServerPassword = AppDefaults.shared.smtpServerPassword ?? ""
@@ -26,9 +29,6 @@ class SettingsViewModel: ObservableObject {
     func saveBinanceUSAPIValues() {
         AppDefaults.shared.binanceUSAPIKey = self.binanceUSAPIKey
         AppDefaults.shared.binanceUSAPISecretKey = self.binanceUSAPISecretKey
-
-        self.binanceUSAPIKey = ""
-        self.binanceUSAPISecretKey = ""
     }
 
     func saveSMTPServerValues() {

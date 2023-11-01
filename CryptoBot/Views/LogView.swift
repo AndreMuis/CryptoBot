@@ -11,17 +11,14 @@ struct LogView: View {
     @ObservedObject private var viewModel = LogViewModel()
 
     var body: some View {
-        VStack() {
-            ScrollView {
+        ScrollView {
+            HStack {
                 Text(self.viewModel.output)
-                    .frame(maxWidth: .infinity)
-                    .padding(5)
-                    .background(Color.white)
-            }.frame(maxWidth: .infinity)
+                Spacer()
+            }
+            .padding(5)
         }
-        .frame(maxWidth: .infinity,
-               maxHeight: .infinity,
-               alignment: .topLeading)
+        .background(Color.white)
         .padding(10)
     }
 }

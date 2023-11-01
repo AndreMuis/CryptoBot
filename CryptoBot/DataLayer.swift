@@ -9,155 +9,71 @@ import Combine
 import Foundation
 
 class DataLayer: ObservableObject {
-    func getExchangeInfo() throws -> AnyPublisher<ExchangeInfo, Error> {
-        do {
-            let endpoint = try ExchangeInfoEndpoint()
+    func getExchangeInfo() async throws -> ExchangeInfo {
+        let endpoint = try ExchangeInfoEndpoint()
+        let data = try await self.downloadData(request: endpoint.request)
+        let info = try JSONDecoder().decode(ExchangeInfo.self, from: data)
 
-            let publisher = self.getBinanceUSData(endpoint: endpoint)
-                .decode(type: ExchangeInfo.self, decoder: JSONDecoder())
-                .eraseToAnyPublisher()
-
-            return publisher
-        }
+        return info
     }
 
-    func getPriceList() throws -> AnyPublisher<[Price], Error> {
-        do {
-            let endpoint = try PriceListEndpoint()
+    func getPriceList() async throws -> [Price] {
+        let endpoint = try PriceListEndpoint()
+        let data = try await self.downloadData(request: endpoint.request)
+        let list = try JSONDecoder().decode([Price].self, from: data)
 
-            let publisher = self.getBinanceUSData(endpoint: endpoint)
-                .decode(type: [Price].self, decoder: JSONDecoder())
-                .eraseToAnyPublisher()
-
-            return publisher
-        }
+        return list
     }
 
-    func getPriceChangeStatisticsList() throws -> AnyPublisher<[PriceChangeStatistics], Error> {
-        do {
-            let endpoint = try PriceChangeStatisticsEndpoint()
+    func getAccountBalanceList() async throws -> [AccountBalance] {
+        let endpoint = try AccountEndpoint()
+        let data = try await self.downloadData(request: endpoint.request)
 
-            let publisher = self.getBinanceUSData(endpoint: endpoint)
-                .decode(type: [PriceChangeStatistics].self, decoder: JSONDecoder())
-                .eraseToAnyPublisher()
-
-            return publisher
+        let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String : Any]
+        guard let balancesArrayJSON = json?["balances"] as? [[String : Any]] else {
+            throw AppError.genericError(message: "unable to extract balances element from JSON")
         }
+        let balancesArrayData = try JSONSerialization.data(withJSONObject: balancesArrayJSON, options: [])
+
+        let list = try JSONDecoder().decode([AccountBalance].self, from: balancesArrayData)
+
+        return list
     }
 
-    func getKlineList(marketPairSymbol: String,
-                      interval: KlineInterval,
-                      limit: Int) throws -> AnyPublisher<[Kline], Error> {
-        do {
-            let endpoint = try KlineListEndpoint(marketPairSymbol: marketPairSymbol,
-                                                 interval: interval,
-                                                 limit: limit)
+    func createBuyOrder(marketPairSymbol: String, quoteQuantity: Decimal, quotePrecision: Int) async throws -> OrderResponse {
+        let endpoint = try OrderEndpoint(marketPairSymbol: marketPairSymbol,
+                                         side: .buy,
+                                         quoteQuantity: quoteQuantity,
+                                         quotePrecision: quotePrecision)
 
-            let publisher = self.getBinanceUSData(endpoint: endpoint)
-                .tryMap { data -> [Kline] in
-                    var klines = [Kline]()
 
-                    if let valuesArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[Any]] {
-                        for values in valuesArray {
-                            let kline = try Kline(marketPairSymbol: marketPairSymbol,
-                                                  interval: interval,
-                                                  values: values)
-                            klines.append(kline)
-                        }
+        let data = try await self.downloadData(request: endpoint.request)
+        let response = try JSONDecoder().decode(OrderResponse.self, from: data)
 
-                        return klines
-                    } else {
-                        throw AppError.genericError(message: "unable to convert array of Any to JSON object")
-                    }
-                }
-                .eraseToAnyPublisher()
-
-            return publisher
-        }
+        return response
     }
 
-    func getAccountBalanceList() throws -> AnyPublisher<[AccountBalance], Error> {
-        do {
-            let endpoint = try AccountEndpoint()
+    func createSellOrder(marketPairSymbol: String, quoteQuantity: Decimal, quotePrecision: Int) async throws -> OrderResponse {
+        let endpoint = try OrderEndpoint(marketPairSymbol: marketPairSymbol,
+                                         side: .sell,
+                                         quoteQuantity: quoteQuantity,
+                                         quotePrecision: quotePrecision)
 
-            let publisher = self.getBinanceUSData(endpoint: endpoint)
-                .tryMap { data -> Data in
-                    let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String : Any]
+        let data = try await self.downloadData(request: endpoint.request)
+        let response = try JSONDecoder().decode(OrderResponse.self, from: data)
 
-                    guard let balancesArrayJSON = json?["balances"] as? [[String : Any]] else {
-                        throw AppError.genericError(message: "unable to extract balances element from JSON")
-                    }
-
-                    let balancesArrayData = try JSONSerialization.data(withJSONObject: balancesArrayJSON, options: [])
-
-                    return balancesArrayData
-                }
-                .decode(type: [AccountBalance].self, decoder: JSONDecoder())
-                .eraseToAnyPublisher()
-
-            return publisher
-        }
+        return response
     }
 
-    func getTradeList(tradingPairSymbol: String) throws -> AnyPublisher<[Trade], Error> {
+    private func downloadData(request: URLRequest) async throws -> Data {
         do {
-            let endpoint = try TradeListEndpoint(tradingPairSymbol: tradingPairSymbol)
+            let (data, _) = try await URLSession.shared.data(for: request)
 
-            let publisher = self.getBinanceUSData(endpoint: endpoint)
-                .decode(type: [Trade].self, decoder: JSONDecoder())
-                .eraseToAnyPublisher()
-
-            return publisher
-        }
-    }
-
-    func createBuyOrder(marketPairSymbol: String,
-                        quoteOrderQuantity: Decimal) throws -> AnyPublisher<OrderResponse, Error> {
-        do {
-            let endpoint = try OrderEndpoint(marketPairSymbol: marketPairSymbol,
-                                             type: .market,
-                                             quoteOrderQuantity: quoteOrderQuantity)
-
-            let publisher = self.getBinanceUSData(endpoint: endpoint)
-                .decode(type: OrderResponse.self, decoder: JSONDecoder())
-                .eraseToAnyPublisher()
-
-            return publisher
-        }
-    }
-
-    func createSellOrder(marketPairSymbol: String,
-                         quantity: Decimal,
-                         limitPrice: Decimal,
-                         stopPrice: Decimal) throws -> AnyPublisher<OCOOrderResponse, Error> {
-        do {
-            let endpoint = try OCOOrderEndpoint(marketPairSymbol: marketPairSymbol,
-                                                quantity: quantity,
-                                                limitPrice: limitPrice,
-                                                stopPrice: stopPrice,
-                                                stopLimitPrice: stopPrice,
-                                                stopLimitTimeInForce: .goodTillCancelled)
-            let publisher = self.getBinanceUSData(endpoint: endpoint)
-                .decode(type: OCOOrderResponse.self, decoder: JSONDecoder())
-                .eraseToAnyPublisher()
-
-            return publisher
-        }
-    }
-
-    private func getBinanceUSData(endpoint: Endpoint) -> AnyPublisher<Data, Error> {
-        let publisher = URLSession.dataTaskPublisher(for: endpoint)
-            .tryMap { data -> Data in
-                let decoder = JSONDecoder()
-
-                if let error = try? decoder.decode(BinanceUSError.self, from: data) {
-                    throw AppError.genericError(message: error.description)
-                } else {
-                    return data
-                }
+            if let error = try? JSONDecoder().decode(BinanceUSError.self, from: data) {
+                throw AppError.genericError(message: error.description)
+            } else {
+                return data
             }
-            .eraseToAnyPublisher()
-
-        return publisher
+        }
     }
 }

@@ -18,15 +18,6 @@ enum AppError: Error {
 
         return AppError.generic(filename, functionName, lineNumber, message)
     }
-
-    static func genericError(filePath: String = #file,
-                             functionName: String = #function,
-                             lineNumber: Int = #line,
-                             error: Error) -> AppError {
-        let filename = URL(string: filePath)?.lastPathComponent ?? filePath
-
-        return AppError.generic(filename, functionName, lineNumber, error.localizedDescription)
-    }
 }
 
 extension AppError: LocalizedError {

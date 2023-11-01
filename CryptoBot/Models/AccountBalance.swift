@@ -8,18 +8,18 @@
 import Foundation
 
 struct AccountBalance: Decodable {
-    let asset: String
+    let symbol: String
     let free: Decimal
     let locked: Decimal
 
     var marketPairSymbol: String {
-        return "\(self.asset)\(Constants.quoteAssetSymbol)"
+        return "\(self.symbol)\(Constants.quoteSymbol)"
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        self.asset = try container.decode(String.self, forKey: .asset)
+        self.symbol = try container.decode(String.self, forKey: .asset)
         self.free = try container.decimalFromString(codingKey: .free)
         self.locked = try container.decimalFromString(codingKey: .locked)
     }

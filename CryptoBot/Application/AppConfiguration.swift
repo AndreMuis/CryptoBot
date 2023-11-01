@@ -11,11 +11,9 @@ struct AppConfiguration {
     enum URLKey: String {
         case binanceUSExchangeInfoURLKey = "BinanceUSExchangeInfoURL"
         case binanceUSPricesURLKey = "BinanceUSPricesURL"
-        case binanceUSPriceChangeStatisticsURLKey = "BinanceUSPriceChangeStatisticsURL"
-        case binanceUSKlinesURLKey = "BinanceUSKlinesURL"
         case binanceUSAccountURLKey = "BinanceUSAccountURL"
         case binanceUSOrderURLKey = "BinanceUSOrderURL"
-        case binanceUSOCOOrderURLKey = "BinanceUSOCOOrderURL"
+        case binanceUSTestOrderURLKey = "BinanceUSTestOrderURL"
         case binanceUSTradesURLKey = "BinanceUSTradesURL"
     }
 

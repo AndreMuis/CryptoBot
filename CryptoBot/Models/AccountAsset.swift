@@ -8,15 +8,15 @@
 import Foundation
 
 struct AccountAsset: Hashable {
-    let name: String
-    var free: Decimal
-    var locked: Decimal
-    var price: Decimal
-    var lastTrade: Trade?
-    var shouldUpdateLastTrade: Bool
+    let symbol: String
+    private let free: Decimal
+    private let locked: Decimal
+    private let price: Decimal
+    private let minSellQuoteQuantity: Decimal
+    let quotePrecision: Int
 
     var marketPairSymbol: String {
-        return "\(self.name)\(Constants.quoteAssetSymbol)"
+        return "\(self.symbol)\(Constants.quoteSymbol)"
     }
 
     var freeAsString: String {
@@ -27,32 +27,40 @@ struct AccountAsset: Hashable {
         return self.locked.stringValue
     }
 
-    var quoteQuantity: Decimal? {
-        return (self.free + self.locked) * price
-    }
-
-    var quoteQuantityAsString: String {
-        return self.quoteQuantity?.currencyAsString ?? ""
-    }
-
     var priceAsString: String {
         return price.stringValue
     }
 
-    var lastTradePriceAsString: String {
-        if let lastTradePrice = self.lastTrade?.price {
-            return lastTradePrice.stringValue
-        } else {
-            return ""
-        }
+    var balance: Decimal {
+        return (self.free + self.locked) * price
     }
 
-    init(name: String, free: Decimal, locked: Decimal, price: Decimal) {
-        self.name = name
+    var balanceAsString: String {
+        return self.balance.currencyAsString
+    }
+
+    private var sellBalance: Decimal {
+        return Constants.initialBalance + self.minSellQuoteQuantity
+    }
+
+    var sellBalanceAsString: String {
+        return self.sellBalance.currencyAsString
+    }
+
+    var sellQuoteQuantity: Decimal {
+        return self.balance - Constants.initialBalance
+    }
+
+    var canSell: Bool {
+        return self.balance > self.sellBalance
+    }
+
+    init(symbol: String, free: Decimal, locked: Decimal, price: Decimal, minSellQuoteQuantity: Decimal, quotePrecision: Int) {
+        self.symbol = symbol
         self.free = free
         self.locked = locked
         self.price = price
-        self.lastTrade = nil
-        self.shouldUpdateLastTrade = true
+        self.minSellQuoteQuantity = minSellQuoteQuantity
+        self.quotePrecision = quotePrecision
     }
 }
