@@ -10,39 +10,46 @@ import Foundation
 struct OrderEndpoint: Endpoint {
     let url: URL
     let httpMethod: String
-    let httpHeaderFieldDictionary: [String : String]?
+    let httpHeaderFields: [String : String]?
+    let httpPOSTFields: [String : String]?
 
     private let shell = Shell()
 
-    init(marketPairSymbol: String, side: OrderSide, quoteQuantity: Decimal, quotePrecision: Int) throws {
-        guard let binanceUSAPIKey = AppDefaults.shared.binanceUSAPIKey else {
-            throw AppError.genericError(message: "could not retrieve Binance US API key from app defaults")
+    init(tradingPairSymbol: String, side: OrderSide, quoteQuantity: Decimal, quotePrecision: Decimal) throws {
+        let timestampAsString = Date.timestampAsString
+
+        guard let byBitAPIKey = AppDefaults.shared.byBitAPIKey else {
+            throw AppError.genericError(message: "could not retrieve ByBit API key from app defaults")
         }
 
-        self.httpMethod = "POST"
-        self.httpHeaderFieldDictionary = [Constants.binanceUSAPIKeyHeaderKey: binanceUSAPIKey]
+        let quoteQuantityAsString = quoteQuantity.getStringValue(maximumFractionDigits: quotePrecision.significantFractionDigits)
 
-        let timestamp = Date.timestamp
-
-        var url = try AppConfiguration.getURL(for: .binanceUSOrderURLKey)
-
-        var queryItems = [
-            URLQueryItem(name: Constants.marketPairSymbolQueryItemName, value: marketPairSymbol),
-            URLQueryItem(name: Constants.sideQueryItemName, value: side.rawValue),
-            URLQueryItem(name: Constants.typeQueryItemName, value: OrderType.market.rawValue),
-            URLQueryItem(name: Constants.quoteOrderQuantityQueryItemName, value: quoteQuantity.getStringValue(maximumFractionDigits: quotePrecision)),
-            URLQueryItem(name: Constants.timestampQueryItemName, value: String(timestamp))
+        let postFields = [
+            Constants.APIQueryItemNames.productCategory: ProductCategory.spot.rawValue,
+            Constants.APIQueryItemNames.tradingPairSymbol: tradingPairSymbol,
+            Constants.APIQueryItemNames.orderSide: side.rawValue,
+            Constants.APIQueryItemNames.orderType: OrderType.market.rawValue,
+            Constants.APIQueryItemNames.quantity: quoteQuantityAsString,
+            Constants.APIQueryItemNames.marketUnit: MarketUnit.quoteCoin.rawValue
         ]
 
-        url = try URL.updateQuery(url: url, queryItems: queryItems)
+        let httpPOSTData = try JSONSerialization.data(withJSONObject: postFields)
 
-        guard let query = url.query else {
-            throw AppError.genericError(message: "unable to parse query string from URL")
+        guard let jsonString = String(data: httpPOSTData, encoding: .utf8) else {
+            throw AppError.genericError(message: "unable to convert post fields as JSON data to String")
         }
 
-        let signature = try self.shell.getSignature(query: query)
-        queryItems.append(URLQueryItem(name: Constants.signatureQueryItemName, value: signature))
+        let text = "\(timestampAsString)\(byBitAPIKey)\(jsonString)"
+        let signature = try self.shell.getSignature(text: text)
 
-        self.url = try URL.updateQuery(url: url, queryItems: queryItems)
+        self.url = try AppConfiguration.getURL(for: .byBitOrderURLKey)
+        self.httpMethod = "POST"
+
+        self.httpHeaderFields = [
+            Constants.APIHeaderKeys.timestamp: timestampAsString,
+            Constants.APIHeaderKeys.byBitKey: byBitAPIKey,
+            Constants.APIHeaderKeys.signature: signature]
+
+        self.httpPOSTFields = postFields
     }
 }

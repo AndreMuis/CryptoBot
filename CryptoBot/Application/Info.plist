@@ -4,14 +4,14 @@
 <dict>
 	<key>Endpoints</key>
 	<dict>
-		<key>BinanceUSExchangeInfoURL</key>
-		<string>https://api.binance.us/api/v3/exchangeInfo</string>
-		<key>BinanceUSPricesURL</key>
-		<string>https://api.binance.us/api/v3/ticker/price</string>
-		<key>BinanceUSAccountURL</key>
-		<string>https://api.binance.us/api/v3/account</string>
-		<key>BinanceUSOrderURL</key>
-		<string>https://api.binance.us/api/v3/order</string>
+		<key>ByBitTradingPairsURL</key>
+		<string>https://api.bybit.com/v5/market/instruments-info</string>
+		<key>ByBitPricesURL</key>
+		<string>https://api.bybit.com/v5/market/tickers</string>
+		<key>ByBitAccountURL</key>
+		<string>https://api.bybit.com/v5/account/wallet-balance</string>
+		<key>ByBitOrderURL</key>
+		<string>https://api.bybit.com/v5/order/create</string>
 	</dict>
 </dict>
 </plist>

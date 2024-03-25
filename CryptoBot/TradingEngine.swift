@@ -27,13 +27,6 @@ class TradingEngine: ObservableObject {
     func start() {
         if case .notStarted = self.status {
             self.run()
-
-            Timer.scheduledTimer(withTimeInterval: Constants.tradingEngineRunIntervalInSeconds,
-                                 repeats: true) { timer in
-                if case .idle = self.status  {
-                    self.run()
-                }
-            }
         }
     }
 
@@ -43,51 +36,47 @@ class TradingEngine: ObservableObject {
         let currentDate = Date()
 
         self.lastRunDate = currentDate
-        self.lastRunDateAsString = currentDate.formatted(date: .abbreviated, time: .shortened)
+        self.lastRunDateAsString = currentDate.formatted(date: .abbreviated, time: .standard)
 
         self.error = nil
 
         Task {
             do {
-                try await Exchange.shared.downloadData()
-                try await PriceList.shared.downloadData()
-                try await self.userAccount.downloadData()
-                try await self.createBuyOrders()
+                try await self.downloadData()
+
+                try await self.createSellOrders()
             } catch {
                 self.error = error
                 Logger.shared.add(entry: error.localizedDescription)
             }
 
             self.status = .idle
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + Constants.tradingEngineRunIntervalInSeconds) {
+                self.run()
+            }
         }
     }
 
-    private func createBuyOrders() async throws {
-        for asset in self.userAccount.accountAssetList.filter({ $0.canSell }) {
-            let _ = try await self.dataLayer.createSellOrder(marketPairSymbol: asset.marketPairSymbol,
-                                                             quoteQuantity: asset.sellQuoteQuantity,
-                                                             quotePrecision: asset.quotePrecision)
+    private func createSellOrders() async throws {
+        let assetList = self.userAccount.assetList.filter({ $0.canSell })
 
-            try await self.sendEmail(accountAsset: asset)
+        for asset in assetList {
+            try await self.dataLayer.createSellOrder(tradingPairSymbol: asset.tradingPairSymbol,
+                                                     quoteQuantity: asset.sellBalance,
+                                                     quotePrecision: asset.quotePrecision)
+
+            Logger.shared.add(entry: "Sold $\(asset.sellBalance) worth of \(asset.tradingPairSymbol)")
+        }
+
+        if assetList.count >= 1 {
+            try await self.downloadData()
         }
     }
 
-    private func sendEmail(accountAsset: AccountAsset) async throws {
-        var subject: String
-        var text: String
-
-        let profit = accountAsset.sellQuoteQuantity.currencyAsString
-
-        subject = "Sold \(profit) of \(accountAsset.symbol)"
-
-        text = """
-        \(accountAsset.marketPairSymbol)\n
-        Balance before sale: \(accountAsset.balanceAsString)
-        Sold: \(profit)
-        """
-
-        Logger.shared.add(entry: "\(subject): \(text)")
-
-        try await self.smtpClient.sendEmail(subject: subject, text: text)
+    private func downloadData() async throws {
+        try await TradingPairList.shared.downloadData()
+        try await PriceList.shared.downloadData()
+        try await self.userAccount.downloadData()
     }
 }

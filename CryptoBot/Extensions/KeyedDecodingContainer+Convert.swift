@@ -8,11 +8,13 @@
 import Foundation
 
 extension KeyedDecodingContainer {
-    func decimalFromString(codingKey: K) throws -> Decimal {
+    func boolFromString(codingKey: K) throws -> Bool {
         let valueAsString = try self.decode(String.self, forKey: codingKey)
 
-        if let value = Decimal(string: valueAsString) {
-            return value
+        if valueAsString == "0" {
+            return false
+        } else if valueAsString == "1" {
+            return true
         } else {
             throw DecodingError.dataCorruptedError(forKey: codingKey,
                                                    in: self,
@@ -24,6 +26,18 @@ extension KeyedDecodingContainer {
         let valueAsString = try self.decode(String.self, forKey: codingKey)
 
         if let value = Int(valueAsString) {
+            return value
+        } else {
+            throw DecodingError.dataCorruptedError(forKey: codingKey,
+                                                   in: self,
+                                                   debugDescription: "could not convert String to Decimal")
+        }
+    }
+
+    func decimalFromString(codingKey: K) throws -> Decimal {
+        let valueAsString = try self.decode(String.self, forKey: codingKey)
+
+        if let value = Decimal(string: valueAsString) {
             return value
         } else {
             throw DecodingError.dataCorruptedError(forKey: codingKey,

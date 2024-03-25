@@ -17,7 +17,6 @@ struct DashboardView: View {
         GridItem(.flexible(), alignment: .leading),
         GridItem(.flexible(), alignment: .leading),
         GridItem(.flexible(), alignment: .leading),
-        GridItem(.flexible(), alignment: .leading),
         GridItem(.flexible(), alignment: .leading)]
 
     init(tradingEngine: TradingEngine, userAccount: UserAccount) {
@@ -44,6 +43,10 @@ struct DashboardView: View {
                 Text("Portfolio Balance: \(self.userAccount.portfolioBalance.currencyAsString)")
                     .padding(5)
                     .background(Color.white)
+
+                Text("# Assets: \(self.userAccount.assetCount)")
+                    .padding(5)
+                    .background(Color.white)
             }
 
             ScrollView {
@@ -54,21 +57,19 @@ struct DashboardView: View {
                         Text("Locked")
                         Text("Price")
                         Text("Balance")
-                        Text("Min Sell Balance")
                     }
                     .padding(.bottom, 1)
                     .font(.headline)
 
-                    ForEach(self.userAccount.accountAssetListSorted, id: \.self) { asset in
+                    ForEach(self.userAccount.assetListSortedByBalance, id: \.self) { asset in
                         Group {
                             Text("\(asset.symbol)")
                             Text("\(asset.freeAsString)")
                             Text("\(asset.lockedAsString)")
                             Text("\(asset.priceAsString)")
                             Text("\(asset.balanceAsString)")
-                            Text("\(asset.sellBalanceAsString)")
                         }
-                        .foregroundColor(asset.canSell ? .blue : .black)
+                        .foregroundColor(asset.canTrade ? (asset.isProfitable ? .blue : .black) : .gray)
                     }
                 }
                 .padding(5)
@@ -93,16 +94,15 @@ struct DashboardView: View {
                     .background(Color.white)
 
                 Spacer()
-
-                Button("Start") {
-                    self.viewModel.startTradingEngine()
-                }
             }
         }
         .frame(maxWidth: .infinity,
                maxHeight: .infinity,
                alignment: .topLeading)
         .padding(10)
+        .onAppear(perform: {
+            self.viewModel.startTradingEngine()
+        })
     }
 }
 

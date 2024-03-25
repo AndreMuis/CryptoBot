@@ -9,12 +9,10 @@ import Foundation
 
 struct AppConfiguration {
     enum URLKey: String {
-        case binanceUSExchangeInfoURLKey = "BinanceUSExchangeInfoURL"
-        case binanceUSPricesURLKey = "BinanceUSPricesURL"
-        case binanceUSAccountURLKey = "BinanceUSAccountURL"
-        case binanceUSOrderURLKey = "BinanceUSOrderURL"
-        case binanceUSTestOrderURLKey = "BinanceUSTestOrderURL"
-        case binanceUSTradesURLKey = "BinanceUSTradesURL"
+        case byBitTradingPairsURLKey = "ByBitTradingPairsURL"
+        case byBitPricesURLKey = "ByBitPricesURL"
+        case byBitAccountURLKey = "ByBitAccountURL"
+        case byBitOrderURLKey = "ByBitOrderURL"
     }
 
     private static var endpoints: [String: String]? {

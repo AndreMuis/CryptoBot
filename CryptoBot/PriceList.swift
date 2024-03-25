@@ -11,7 +11,7 @@ class PriceList {
     static let shared = PriceList()
 
     private let dataLayer = DataLayer()
-    private var list = [Price]()
+    var list = [Price]()
 
     func downloadData() async throws {
         do {
@@ -19,7 +19,7 @@ class PriceList {
         }
     }
 
-    func price(marketPairSymbol: String) -> Price? {
-        return self.list.filter({ $0.marketPairSymbol == marketPairSymbol }).first
+    func price(tradingPairSymbol: String) -> Price? {
+        return self.list.filter({ $0.tradingPairSymbol == tradingPairSymbol }).first
     }
 }

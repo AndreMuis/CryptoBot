@@ -1,20 +1,20 @@
 //
-//  PriceListEndpoint.swift
-//  CryptoBot
+//  TradingPairListEndpoint.swift
+//  Crypto Bot
 //
-//  Created by Andre Muis on 4/28/22.
+//  Created by Andre Muis on 5/28/22.
 //
 
 import Foundation
 
-struct PriceListEndpoint: Endpoint {
+struct TradingPairListEndpoint: Endpoint {
     let url: URL
     let httpMethod: String
     let httpHeaderFields: [String : String]?
     let httpPOSTFields: [String : String]?
 
     init() throws {
-        var url = try AppConfiguration.getURL(for: .byBitPricesURLKey)
+        var url = try AppConfiguration.getURL(for: .byBitTradingPairsURLKey)
 
         let queryItems = [
             URLQueryItem(name: Constants.APIQueryItemNames.productCategory,

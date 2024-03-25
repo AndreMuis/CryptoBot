@@ -9,26 +9,43 @@ import CoreGraphics
 import Foundation
 
 struct Constants {
-    static let binanceUSAPIKeyKey = "binanceUSAPIKey"
-    static let binanceUSAPISecretKeyKey = "binanceUSSecretKey"
+    struct AppDefaultKeys {
+        static let byBitAPIKey = "byBitAPIKey"
+        static let byBitAPISecret = "byBitAPISecret"
 
-    static let binanceUSAPIKeyHeaderKey = "X-MBX-APIKEY"
+        static var smtpServerHostname = "SMTPServerHostname"
+        static var smtpServerEmail = "SMTPServerEmail"
+        static var smtpServerPassword = "SMTPServerPassword"
+    }
 
-    static let marketPairSymbolQueryItemName = "symbol"
-    static let sideQueryItemName = "side"
-    static let typeQueryItemName = "type"
-    static let quoteOrderQuantityQueryItemName = "quoteOrderQty"
-    static let timestampQueryItemName = "timestamp"
-    static let signatureQueryItemName = "signature"
+    struct APIHeaderKeys {
+        static let byBitKey = "X-BAPI-API-KEY"
+        static let timestamp = "X-BAPI-TIMESTAMP"
+        static let signature = "X-BAPI-SIGN"
+    }
 
-    static var smtpServerHostnameKey = "SMTPServerHostname"
-    static var smtpServerEmailKey = "SMTPServerEmail"
-    static var smtpServerPasswordKey = "SMTPServerPassword"
+    struct APIQueryItemNames {
+        static let tradingPairSymbol = "symbol"
+        static let orderSide = "side"
+        static let orderType = "orderType"
+        static let quantity = "qty"
+        static let timestamp = "timestamp"
+        static let signature = "signature"
+        static let productCategory = "category"
+        static let marketUnit = "marketUnit"
+        static let accountType = "accountType"
+    }
 
-    static var fromEmail = "no-reply@company.com"
+    static let responseCodeOK = 0
 
-    static let tradingEngineRunIntervalInSeconds: TimeInterval = 1.0 * 60.0
+    static let fromEmail = "no-reply@company.com"
+
+    static let tradingEngineRunIntervalInSeconds: TimeInterval = 5.0 * 60.0
 
     static let quoteSymbol = "USDT"
     static let initialBalance = Decimal(100.0)
+
+
 }
+
+

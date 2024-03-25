@@ -8,18 +8,18 @@
 import Foundation
 
 struct Price: Decodable {
-    let marketPairSymbol: String
-    let amount: Decimal
+    let tradingPairSymbol: String
+    let lastPrice: Decimal
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        self.marketPairSymbol = try container.decode(String.self, forKey: .marketPairSymbol)
-        self.amount = try container.decimalFromString(codingKey: .amount)
+        self.tradingPairSymbol = try container.decode(String.self, forKey: .tradingPairSymbol)
+        self.lastPrice = try container.decimalFromString(codingKey: .lastPrice)
     }
 
     enum CodingKeys: String, CodingKey {
-        case marketPairSymbol = "symbol"
-        case amount = "price"
+        case tradingPairSymbol = "symbol"
+        case lastPrice = "lastPrice"
     }
 }

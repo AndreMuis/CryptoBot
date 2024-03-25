@@ -8,8 +8,8 @@
 import Foundation
 
 extension URL {
-    static func updateQuery(url: URL, queryItems: [URLQueryItem]) throws -> URL {
-        guard var components = URLComponents(string: url.absoluteString) else {
+    mutating func add(queryItems: [URLQueryItem]) throws {
+        guard var components = URLComponents(string: self.absoluteString) else {
             throw AppError.genericError(message: "could not extract components from URL")
         }
 
@@ -19,6 +19,6 @@ extension URL {
             throw AppError.genericError(message: "could not create URL from components")
         }
 
-        return url
+        self = url
     }
 }

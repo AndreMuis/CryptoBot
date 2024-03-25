@@ -8,6 +8,10 @@
 import Foundation
 
 extension Decimal {
+    var significantFractionDigits: Int {
+        return max(-self.exponent, 0)
+    }
+
     var stringValue: String {
         return NSDecimalNumber(decimal: self).stringValue
     }

@@ -13,53 +13,53 @@ struct AppDefaults {
 
     static var shared = AppDefaults()
 
-    var binanceUSAPIKey: String? {
+    var byBitAPIKey: String? {
         get {
-            userDefaults.string(forKey: Constants.binanceUSAPIKeyKey)
+            userDefaults.string(forKey: Constants.AppDefaultKeys.byBitAPIKey)
         }
 
         set {
-            userDefaults.set(newValue, forKey: Constants.binanceUSAPIKeyKey)
+            userDefaults.set(newValue, forKey: Constants.AppDefaultKeys.byBitAPIKey)
         }
     }
 
-    var binanceUSAPISecretKey: String? {
+    var byBitAPISecret: String? {
         get {
-            userDefaults.string(forKey: Constants.binanceUSAPISecretKeyKey)
+            userDefaults.string(forKey: Constants.AppDefaultKeys.byBitAPISecret)
         }
 
         set {
-            userDefaults.set(newValue, forKey: Constants.binanceUSAPISecretKeyKey)
+            userDefaults.set(newValue, forKey: Constants.AppDefaultKeys.byBitAPISecret)
         }
     }
 
     var smtpServerHostname: String? {
         get {
-            userDefaults.string(forKey: Constants.smtpServerHostnameKey)
+            userDefaults.string(forKey: Constants.AppDefaultKeys.smtpServerHostname)
         }
 
         set {
-            userDefaults.set(newValue, forKey: Constants.smtpServerHostnameKey)
+            userDefaults.set(newValue, forKey: Constants.AppDefaultKeys.smtpServerHostname)
         }
     }
 
     var smtpServerEmail: String? {
         get {
-            userDefaults.string(forKey: Constants.smtpServerEmailKey)
+            userDefaults.string(forKey: Constants.AppDefaultKeys.smtpServerEmail)
         }
 
         set {
-            userDefaults.set(newValue, forKey: Constants.smtpServerEmailKey)
+            userDefaults.set(newValue, forKey: Constants.AppDefaultKeys.smtpServerEmail)
         }
     }
 
     var smtpServerPassword: String? {
         get {
-            userDefaults.string(forKey: Constants.smtpServerPasswordKey)
+            userDefaults.string(forKey: Constants.AppDefaultKeys.smtpServerPassword)
         }
 
         set {
-            userDefaults.set(newValue, forKey: Constants.smtpServerPasswordKey)
+            userDefaults.set(newValue, forKey: Constants.AppDefaultKeys.smtpServerPassword)
         }
     }
 }

@@ -8,6 +8,6 @@
 import Foundation
 
 enum OrderSide: String, Decodable {
-    case buy = "BUY"
-    case sell = "SELL"
+    case buy = "Buy"
+    case sell = "Sell"
 }

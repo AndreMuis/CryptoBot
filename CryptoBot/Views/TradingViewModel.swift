@@ -8,42 +8,53 @@
 import Foundation
 
 class TradingViewModel: ObservableObject {
-    let dataLayer = DataLayer()
-    let userAccount: UserAccount
+    private let dataLayer = DataLayer()
 
-    private var accountAssetToBuy = [AccountAsset]()
-    private var assetIndex = 0
-
-    @Published var isAlertPresented = false
-    @Published var alertMessage = ""
+    private var userAccount: UserAccount
+    
+    @Published private(set) var error: Error?
 
     init(userAccount: UserAccount) {
         self.userAccount = userAccount
     }
 
-    func buyAssets() {
-        self.accountAssetToBuy = self.userAccount.accountAssetListSorted.filter({ $0.balance < 1.0 })
-
-        let asset = self.accountAssetToBuy[self.assetIndex]
-
-        self.alertMessage = "Buy \(Constants.initialBalance.currencyAsString) of \(asset.symbol)"
-        self.isAlertPresented = true
-    }
-
-    func buyAsset() {
+    func buy(accountAsset: AccountAsset) {
+        self.error = nil
 
         Task {
-            var asset = self.accountAssetToBuy[self.assetIndex]
+            do {
+                try await self.dataLayer.createBuyOrder(tradingPairSymbol: accountAsset.tradingPairSymbol,
+                                                        quoteQuantity: accountAsset.buyBalance,
+                                                        quotePrecision: accountAsset.quotePrecision)
 
-            _ = try await self.dataLayer.createBuyOrder(marketPairSymbol: asset.marketPairSymbol,
-                                                        quoteQuantity: Constants.initialBalance,
-                                                        quotePrecision: asset.quotePrecision)
-
-            self.assetIndex += 1
-            asset = self.accountAssetToBuy[self.assetIndex]
-
-            self.alertMessage = "Buy \(Constants.initialBalance.currencyAsString) of \(asset.symbol)"
-            self.isAlertPresented = true
+                try await self.refreshUserAccount()
+            } catch {
+                self.error = error
+                Logger.shared.add(entry: error.localizedDescription)
+            }
         }
+    }
+
+    func sell(accountAsset: AccountAsset) {
+        self.error = nil
+
+        Task {
+            do {
+                _ = try await self.dataLayer.createSellOrder(tradingPairSymbol: accountAsset.tradingPairSymbol,
+                                                             quoteQuantity: accountAsset.sellBalance,
+                                                             quotePrecision: accountAsset.quotePrecision)
+
+                try await self.refreshUserAccount()
+            } catch {
+                self.error = error
+                Logger.shared.add(entry: error.localizedDescription)
+            }
+        }
+    }
+
+    private func refreshUserAccount() async throws {
+        try await TradingPairList.shared.downloadData()
+        try await PriceList.shared.downloadData()
+        try await self.userAccount.downloadData()
     }
 }

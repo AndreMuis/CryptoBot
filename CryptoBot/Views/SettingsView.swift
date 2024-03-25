@@ -12,29 +12,29 @@ struct SettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Binance US API")
+            Text("ByBit US API")
                 .bold()
                 .padding(5)
                 .background(Color.white)
 
             HStack {
-                Text("Binance US API Key:")
+                Text("ByBit US API Key:")
 
-                TextField("Binance US API key", text: self.$viewModel.binanceUSAPIKey)
+                TextField("ByBit US API key", text: self.$viewModel.byBitAPIKey)
                     .padding(5)
                     .background(Color.white)
             }
 
             HStack {
-                Text("Binance US Secret Key:")
+                Text("ByBit US Secret Key:")
 
-                TextField("Binance US secret key", text: self.$viewModel.binanceUSAPISecretKey)
+                TextField("ByBit US secret key", text: self.$viewModel.byBitAPISecret)
                     .padding(5)
                     .background(Color.white)
             }
 
             Button("Save") {
-                self.viewModel.saveBinanceUSAPIValues()
+                self.viewModel.saveByBitAPIValues()
             }
             .padding(.bottom, 20)
 

@@ -19,7 +19,8 @@ struct RootView: View {
                     Text("Dashboard")
                 }
 
-            TradingView(userAccount: self.userAccount)
+            TradingView(tradingEngine: self.tradingEngine,
+                        userAccount: self.userAccount)
                 .tabItem {
                     Text("Trade")
                 }

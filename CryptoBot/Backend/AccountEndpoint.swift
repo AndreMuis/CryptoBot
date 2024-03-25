@@ -10,35 +10,42 @@ import Foundation
 struct AccountEndpoint: Endpoint {
     let url: URL
     let httpMethod: String
-    let httpHeaderFieldDictionary: [String : String]?
+    let httpHeaderFields: [String : String]?
+    let httpPOSTFields: [String : String]?
 
     private let shell = Shell()
 
     init() throws {
-        guard let binanceUSAPIKey = AppDefaults.shared.binanceUSAPIKey else {
-            throw AppError.genericError(message: "could not retrieve Binance US API key from app defaults")
+        let timestampAsString = String(Date.timestamp)
+
+        guard let byBitAPIKey = AppDefaults.shared.byBitAPIKey else {
+            throw AppError.genericError(message: "could not retrieve ByBit API key from app defaults")
         }
 
-        self.httpMethod = "GET"
-        self.httpHeaderFieldDictionary = [Constants.binanceUSAPIKeyHeaderKey: binanceUSAPIKey]
+        var url = try AppConfiguration.getURL(for: .byBitAccountURLKey)
 
-        let timestamp = Date.timestamp
-
-        var url = try AppConfiguration.getURL(for: .binanceUSAccountURLKey)
-
-        var queryItems = [
-            URLQueryItem(name: Constants.timestampQueryItemName, value: String(timestamp))
+        let queryItems = [
+            URLQueryItem(name: Constants.APIQueryItemNames.accountType, 
+                         value: AccountType.unified.rawValue)
         ]
 
-        url = try URL.updateQuery(url: url, queryItems: queryItems)
+        try url.add(queryItems: queryItems)
 
         guard let query = url.query else {
             throw AppError.genericError(message: "unable to parse query string from URL")
         }
 
-        let signature = try self.shell.getSignature(query: query)
-        queryItems.append(URLQueryItem(name: Constants.signatureQueryItemName, value: signature))
+        let text = "\(timestampAsString)\(byBitAPIKey)\(query)"
+        let signature = try self.shell.getSignature(text: text)
 
-        self.url = try URL.updateQuery(url: url, queryItems: queryItems)
+        self.url = url
+        self.httpMethod = "GET"
+
+        self.httpHeaderFields = [
+            Constants.APIHeaderKeys.byBitKey: byBitAPIKey,
+            Constants.APIHeaderKeys.timestamp: timestampAsString,
+            Constants.APIHeaderKeys.signature: signature]
+
+        self.httpPOSTFields = nil
     }
 }

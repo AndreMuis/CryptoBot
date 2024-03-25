@@ -8,12 +8,14 @@
 import Foundation
 
 struct Shell {
-    func getSignature(query: String) throws -> String {
-        guard let binanceUSAPISecretKey = AppDefaults.shared.binanceUSAPISecretKey else {
-            throw AppError.genericError(message: "could not retrieve Binance US API secret key from app defaults")
+    func getSignature(text: String) throws -> String {
+        guard let byBitAPISecret = AppDefaults.shared.byBitAPISecret else {
+            throw AppError.genericError(message: "could not retrieve ByBit API secret key from app defaults")
         }
 
-        let command = "echo -n \"\(query)\" | openssl dgst -sha256 -hmac \(binanceUSAPISecretKey)"
+        let text = text.replacingOccurrences(of: "\"", with: "\\\"")
+
+        let command = "echo -n \"\(text)\" | openssl dgst -sha256 -hmac \(byBitAPISecret)"
 
         return try self.run(command)
     }

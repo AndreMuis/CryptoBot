@@ -11,4 +11,8 @@ extension Date {
     static var timestamp: Int {
         Int(Date().timeIntervalSince1970 * 1000)
     }
+
+    static var timestampAsString: String {
+        String(Self.timestamp)
+    }
 }

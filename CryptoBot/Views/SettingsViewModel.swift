@@ -10,25 +10,25 @@ import Foundation
 import AppKit
 
 class SettingsViewModel: ObservableObject {
-    @Published var binanceUSAPIKey: String = ""
-    @Published var binanceUSAPISecretKey: String = ""
+    @Published var byBitAPIKey: String = ""
+    @Published var byBitAPISecret: String = ""
 
     @Published var smtpServerHostname: String = ""
     @Published var smtpServerEmail: String = ""
     @Published var smtpServerPassword: String = ""
 
     func viewDidAppear() {
-        self.binanceUSAPIKey = AppDefaults.shared.binanceUSAPIKey ?? ""
-        self.binanceUSAPISecretKey = AppDefaults.shared.binanceUSAPISecretKey ?? ""
+        self.byBitAPIKey = AppDefaults.shared.byBitAPIKey ?? ""
+        self.byBitAPISecret = AppDefaults.shared.byBitAPISecret ?? ""
 
         self.smtpServerHostname = AppDefaults.shared.smtpServerHostname ?? ""
         self.smtpServerEmail = AppDefaults.shared.smtpServerEmail ?? ""
         self.smtpServerPassword = AppDefaults.shared.smtpServerPassword ?? ""
     }
 
-    func saveBinanceUSAPIValues() {
-        AppDefaults.shared.binanceUSAPIKey = self.binanceUSAPIKey
-        AppDefaults.shared.binanceUSAPISecretKey = self.binanceUSAPISecretKey
+    func saveByBitAPIValues() {
+        AppDefaults.shared.byBitAPIKey = self.byBitAPIKey
+        AppDefaults.shared.byBitAPISecret = self.byBitAPISecret
     }
 
     func saveSMTPServerValues() {
