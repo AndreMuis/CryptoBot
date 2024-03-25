@@ -25,15 +25,13 @@ struct Constants {
     }
 
     struct APIQueryItemNames {
-        static let tradingPairSymbol = "symbol"
-        static let orderSide = "side"
-        static let orderType = "orderType"
-        static let quantity = "qty"
-        static let timestamp = "timestamp"
-        static let signature = "signature"
-        static let productCategory = "category"
-        static let marketUnit = "marketUnit"
         static let accountType = "accountType"
+        static let productCategory = "category"
+        static let tradingPairSymbol = "symbol"
+        static let orderType = "orderType"
+        static let orderSide = "side"
+        static let quantity = "qty"
+        static let marketUnit = "marketUnit"
     }
 
     static let responseCodeOK = 0
@@ -44,8 +42,6 @@ struct Constants {
 
     static let quoteSymbol = "USDT"
     static let initialBalance = Decimal(100.0)
-
-
 }
 
 
