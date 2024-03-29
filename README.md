@@ -10,4 +10,4 @@ You will have to install OpenSSL separately for security reasons.
 
 Add your SMTP server settings on the Settings tab to receive emails from the bot.
 
-<img width="912" alt="Screen Shot 2022-05-29 at 1 58 03 PM" src="https://user-images.githubusercontent.com/920149/170891214-4cbda088-e984-4452-9ae7-ae3c06331843.png">
+<img width="920" alt="Screenshot 2024-03-28 at 5 37 17 PM" src="https://github.com/AndreMuis/CryptoBot/assets/920149/8d2fb2a9-e66c-48d6-a4db-fae6a0941258">
