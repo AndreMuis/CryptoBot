@@ -8,7 +8,7 @@ Uses the ByBit API.
 
 Invests a fixed amount into every coin on ByBit and converts any increase greater than the minimum trade amount for that coin to USDT.
 
-You will have to install OpenSSL separately for security reasons.
+You will have to install OpenSSL on your Mac separately for security reasons.
 
 Add your SMTP server settings on the Settings tab to receive emails from the bot.
 
