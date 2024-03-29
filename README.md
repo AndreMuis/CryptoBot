@@ -4,7 +4,7 @@
 
 Crypto bot for macOS
 
-Currently only works with the ByBit API.
+Uses the ByBit API.
 
 Invests a fixed amount into every coin on ByBit and converts any increase greater than the minimum trade amount for that coin to USDT.
 
