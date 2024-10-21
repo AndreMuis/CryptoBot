@@ -17,6 +17,7 @@ struct OrderEndpoint: Endpoint {
 
     init(tradingPairSymbol: String, side: OrderSide, quoteQuantity: Decimal, quotePrecision: Decimal) throws {
         let timestampAsString = Date.timestampAsString
+        let requestTimeoutAsString = String(Constants.requestTimeoutInMilliseconds)
 
         guard let byBitAPIKey = AppDefaults.shared.byBitAPIKey else {
             throw AppError.genericError(message: "could not retrieve ByBit API key from app defaults")
@@ -39,7 +40,7 @@ struct OrderEndpoint: Endpoint {
             throw AppError.genericError(message: "unable to convert post fields as JSON data to String")
         }
 
-        let text = "\(timestampAsString)\(byBitAPIKey)\(jsonString)"
+        let text = "\(timestampAsString)\(byBitAPIKey)\(requestTimeoutAsString)\(jsonString)"
         let signature = try self.shell.getSignature(text: text)
 
         self.url = try AppConfiguration.getURL(for: .byBitOrderURLKey)
@@ -48,6 +49,7 @@ struct OrderEndpoint: Endpoint {
         self.httpHeaderFields = [
             Constants.APIHeaderKeys.timestamp: timestampAsString,
             Constants.APIHeaderKeys.byBitKey: byBitAPIKey,
+            Constants.APIHeaderKeys.receiveWindow: String(Constants.requestTimeoutInMilliseconds),
             Constants.APIHeaderKeys.signature: signature]
 
         self.httpPOSTFields = postFields

@@ -21,6 +21,7 @@ struct Constants {
     struct APIHeaderKeys {
         static let byBitKey = "X-BAPI-API-KEY"
         static let timestamp = "X-BAPI-TIMESTAMP"
+        static let receiveWindow = "X-BAPI-RECV-WINDOW"
         static let signature = "X-BAPI-SIGN"
     }
 
@@ -35,13 +36,14 @@ struct Constants {
     }
 
     static let responseCodeOK = 0
+    static let requestTimeoutInMilliseconds = 5000
 
     static let fromEmail = "no-reply@company.com"
 
     static let tradingEngineRunIntervalInSeconds: TimeInterval = 5.0 * 60.0
 
     static let quoteSymbol = "USDT"
-    static let initialBalance = Decimal(100.0)
+    static let initialBalance = Decimal(50.0)
 }
 
 

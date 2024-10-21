@@ -17,6 +17,7 @@ struct AccountEndpoint: Endpoint {
 
     init() throws {
         let timestampAsString = String(Date.timestamp)
+        let requestTimeoutAsString = String(Constants.requestTimeoutInMilliseconds)
 
         guard let byBitAPIKey = AppDefaults.shared.byBitAPIKey else {
             throw AppError.genericError(message: "could not retrieve ByBit API key from app defaults")
@@ -35,15 +36,16 @@ struct AccountEndpoint: Endpoint {
             throw AppError.genericError(message: "unable to parse query string from URL")
         }
 
-        let text = "\(timestampAsString)\(byBitAPIKey)\(query)"
+        let text = "\(timestampAsString)\(byBitAPIKey)\(requestTimeoutAsString)\(query)"
         let signature = try self.shell.getSignature(text: text)
 
         self.url = url
         self.httpMethod = "GET"
 
         self.httpHeaderFields = [
-            Constants.APIHeaderKeys.byBitKey: byBitAPIKey,
             Constants.APIHeaderKeys.timestamp: timestampAsString,
+            Constants.APIHeaderKeys.byBitKey: byBitAPIKey,
+            Constants.APIHeaderKeys.receiveWindow: String(Constants.requestTimeoutInMilliseconds),
             Constants.APIHeaderKeys.signature: signature]
 
         self.httpPOSTFields = nil

@@ -43,8 +43,6 @@ class TradingEngine: ObservableObject {
         Task {
             do {
                 try await self.downloadData()
-
-                try await self.createSellOrders()
             } catch {
                 self.error = error
                 Logger.shared.add(entry: error.localizedDescription)
@@ -55,22 +53,6 @@ class TradingEngine: ObservableObject {
             DispatchQueue.main.asyncAfter(deadline: .now() + Constants.tradingEngineRunIntervalInSeconds) {
                 self.run()
             }
-        }
-    }
-
-    private func createSellOrders() async throws {
-        let assetList = self.userAccount.assetList.filter({ $0.canSell })
-
-        for asset in assetList {
-            try await self.dataLayer.createSellOrder(tradingPairSymbol: asset.tradingPairSymbol,
-                                                     quoteQuantity: asset.sellBalance,
-                                                     quotePrecision: asset.quotePrecision)
-
-            Logger.shared.add(entry: "Sold $\(asset.sellBalance) worth of \(asset.tradingPairSymbol)")
-        }
-
-        if assetList.count >= 1 {
-            try await self.downloadData()
         }
     }
 
