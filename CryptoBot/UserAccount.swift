@@ -12,7 +12,7 @@ import SwiftSMTP
 class UserAccount: ObservableObject {
     private let dataLayer = DataLayer()
 
-    private var assetExclusionList = [Constants.quoteSymbol, "USDY", "CUSD", "USDD", "TUSD", "MUSD", "DAI", "USDC", "USDE", "PYUSD", "PAXG", "TOMS", "JEFF", "KUB", "TRC", "PURSE", "BTC3S", "BTC3L", "ETH3S", "ETH3L", "XRP3S", "XRP3L", "DOT3S", "DOT3L", "AVAX2S", "AVAX2L", "ADA2S", "ADA2L", "LTC2S", "LTC2L", "SAND2S", "SAND2L", "MATIC2S", "MATIC2L", "ETC2S", "ETC2L", "APE2S", "APE2L", "GMT2S", "GMT2L", "LINK2L", "LINK2S", "FTM2L", "FTM2S", "DOGE2S", "DOGE2L", "ATOM2S", "ATOM2L", "EOS2S", "EOS2L"]
+    private var assetExclusionList = [Constants.quoteSymbol, "USDY", "CUSD", "USDD", "TUSD", "MUSD", "DAI", "USDC", "USDE", "PYUSD", "PAXG", "TOMS", "JEFF", "KUB", "TRC", "PURSE", "BTC3S", "BTC3L", "ETH3S", "ETH3L", "XRP3S", "XRP3L", "DOT3S", "DOT3L", "AVAX2S", "AVAX2L", "ADA2S", "ADA2L", "LTC2S", "LTC2L", "SAND2S", "SAND2L", "MATIC2S", "MATIC2L", "ETC2S", "ETC2L", "APE2S", "APE2L", "GMT2S", "GMT2L", "LINK2L", "LINK2S", "FTM2L", "FTM2S", "DOGE2S", "DOGE2L", "ATOM2S", "ATOM2L", "EOS2S", "EOS2L", "KRO"]
 
     @Published var assetList = [AccountAsset]()
     @Published var assetCount = 0
